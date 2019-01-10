@@ -115,7 +115,35 @@
           <!-- Icon Cards-->
          <!--  <div clss ="container"> -->
           
-<!-- </div> -->
+<!-- </div> --><form>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      
+      <input type="id" class="form-control" id="select_idSensor" placeholder="Sensor ID">
+    </div>
+    
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group col-md-6">
+     
+    
+    <input class="form-control" type="datetime-local" id="example-datetime-local-input">
+ 
+            
+    </div>
+
+    <div class="form-group col-md-6">
+     
+       <input class="form-control" type="datetime-local"  id="example-datetime-local-input">
+    </div>
+    
+ <div class="form-group col-md-12">
+     
+       
+       <button  name="button_1" type="button" class="btn btn-primary btn-lg btn-block refreshBtn"" >Go</button>
+</form>
+
           <!-- Area Chart Example-->
           <div class="card mb-3">
             <div class="card-header">
@@ -187,6 +215,7 @@
 <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script>
+
 window.onload = function() {
 
 var dataPoints = [];
@@ -202,7 +231,7 @@ var chart = new CanvasJS.Chart("chartContainer", {
 		titleFontSize: 24
 	},
 	data: [{
-		type: "column",
+		type: "area",
 		dataPoints: dataPoints
 	}]
 });
@@ -220,6 +249,8 @@ function addData(data) {
 
 $.getJSON("https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=36", addData);
 }
+
+
 
 </script>
 
