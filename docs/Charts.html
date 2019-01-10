@@ -128,14 +128,14 @@
     <div class="form-group col-md-6">
      
     
-    <input class="form-control" type="datetime-local" id="example-datetime-local-input">
+    <input class="form-control" type="datetime-local" id="start_date">
  
             
     </div>
 
     <div class="form-group col-md-6">
      
-       <input class="form-control" type="datetime-local"  id="example-datetime-local-input">
+       <input class="form-control" type="datetime-local"  id="end_date">
     </div>
     
  <div class="form-group col-md-12">
@@ -216,7 +216,7 @@
 <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 <script>
 
-window.onload = function() {
+$(".refreshBtn").click(function () {
 
 var dataPoints = [];
 
@@ -238,21 +238,46 @@ var chart = new CanvasJS.Chart("chartContainer", {
 
 
 function addData(data) {
+	
+	var startDate = document.getElementById("start_date").value;
+	var endDate = document.getElementById("end_date").value;
+	
 	for (var i = 0; i < data.length; i++) {
-		dataPoints.push({
-			x: new Date(data[i].measurementDate),
-			y: data[i].value
-		});
+			if(startDate=="" && endDate==""){
+				dataPoints.push({
+				x: new Date(data[i].measurementDate),
+				y: data[i].value
+			});
+			}else if(startDate==""){
+				if(endDate>=data[i].measurementDate){
+					dataPoints.push({
+					x: new Date(data[i].measurementDate),
+					y: data[i].value
+					});
+				}
+			}else if(endDate==""){
+				if(startDate<=data[i].measurementDate){
+					dataPoints.push({
+					x: new Date(data[i].measurementDate),
+					y: data[i].value
+					});
+				}
+			}else{
+				if(startDate<=data[i].measurementDate && endDate>=data[i].measurementDate){
+					dataPoints.push({
+					x: new Date(data[i].measurementDate),
+					y: data[i].value
+					});
+				}
+			}
+	
 	}
 	chart.render();
 
 }
-var _idSensor = 37;
-              //  var _idSensor = document.getElementById("select_idSensor").value;
-                var param = "https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=" + _idSensor;
 
-$.getJSON(param, addData);
-}
+$.getJSON("https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=36", addData);
+});
 
 
 
