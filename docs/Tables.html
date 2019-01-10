@@ -133,14 +133,14 @@
     <div class="form-group col-md-6">
      
     
-    <input class="form-control" type="datetime-local"  id="example-datetime-local-input">
+    <input class="form-control" type="datetime-local"  id="start_date">
  
             
     </div>
 
     <div class="form-group col-md-6">
      
-       <input class="form-control" type="datetime-local"  id="example-datetime-local-input">
+       <input class="form-control" type="datetime-local"  id="end_date">
     </div>
     
  <div class="form-group col-md-12">
@@ -238,55 +238,173 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
      <script>
-           
             $(".refreshBtn").click(function () {
                 var _idSensor = document.getElementById("select_idSensor").value;
                 var param = "https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=" + _idSensor;
 				var min = document.getElementById("min_value").value;
 				var max = document.getElementById("max_value").value;
+				
+				var startDate = document.getElementById("start_date").value;
+				var endDate = document.getElementById("end_date").value;
+				
+				console.log(startDate);
+				console.log(endDate);
+				console.log(startDate>endDate);
+				
+				
                 console.log("START: refreshBtn");
                 $.ajax({
-
+				
                     url: param,
                     dataType: "json",
                     success: function (data) {
 						$("table").empty();
                         $(data).each(function (index, value) {
-						if(min=="" && max==""){
-
-                            var record = "<tr><td>" + value.measurementId + "</td><td>" +
-                                value.measurementDate + "</td><td>" + value.value +
-                                "</td><td>" + value.sensorId + "</td></tr>";
-                            $("table").append(record);
-							
-						}
-						else if(max==""){
+							console.log(startDate>=value.measurementDate);
+							if(startDate=="" && endDate==""){	
+								if(min=="" && max==""){
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+										value.measurementDate + "</td><td>" + value.value +
+										"</td><td>" + value.sensorId + "</td></tr>";
+									$("table").append(record);
+									
+								}
+								else if(max==""){
+									if(value.value>=min){
 						
-							if(value.value>=min){
-								var record = "<tr><td>" + value.measurementId + "</td><td>" +
-									value.measurementDate + "</td><td>" + value.value +
-									"</td><td>" + value.sensorId + "</td></tr>";
-								$("table").append(record);
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else if(min==""){
+									if(value.value<=max){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else{
+									if(value.value>=min && value.value<=max){
+									
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+							}else if(startDate==""){	
+								if(min=="" && max==""){
+									if(value.measurementDate<=endDate){
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+										value.measurementDate + "</td><td>" + value.value +
+										"</td><td>" + value.sensorId + "</td></tr>";
+									$("table").append(record);
+									}
+								}
+								else if(max==""){
+									if(value.value>=min && value.measurementDate<=endDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else if(min==""){
+									if(value.value<=max && value.measurementDate<=endDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else{
+									if(value.value>=min && value.value<=max && value.measurementDate<=endDate){
+									
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+							}else if(endDate==""){	
+								if(min=="" && max==""){
+									if(value.measurementDate>=startDate){
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+										value.measurementDate + "</td><td>" + value.value +
+										"</td><td>" + value.sensorId + "</td></tr>";
+									$("table").append(record);
+									}
+								}
+								else if(max==""){
+									if(value.value>=min && value.measurementDate>=startDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else if(min==""){
+									if(value.value<=max && value.measurementDate>=startDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else{
+									if(value.value>=min && value.value<=max && value.measurementDate>=startDate){
+									
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+							}else {
+								if(min=="" && max==""){
+									if(value.measurementDate<=endDate && value.measurementDate>=startDate){
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+										value.measurementDate + "</td><td>" + value.value +
+										"</td><td>" + value.sensorId + "</td></tr>";
+									$("table").append(record);
+									}
+								}
+								else if(max==""){
+									if(value.value>=min && value.measurementDate<=endDate && value.measurementDate>=startDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else if(min==""){
+									if(value.value<=max && value.measurementDate<=endDate && value.measurementDate>=startDate){
+									
+										var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
+								else{
+									if(value.value>=min && value.value<=max && value.measurementDate<=endDate && value.measurementDate<=startDate){
+									
+									var record = "<tr><td>" + value.measurementId + "</td><td>" +
+											value.measurementDate + "</td><td>" + value.value +
+											"</td><td>" + value.sensorId + "</td></tr>";
+										$("table").append(record);
+									}
+								}
 							}
-                        }
-						else if(min==""){
-						
-							if(value.value<=max){
-								var record = "<tr><td>" + value.measurementId + "</td><td>" +
-									value.measurementDate + "</td><td>" + value.value +
-									"</td><td>" + value.sensorId + "</td></tr>";
-								$("table").append(record);
-							}
-                        }
-						else{
-						
-							if(value.value>=min && value.value<=max){
-							var record = "<tr><td>" + value.measurementId + "</td><td>" +
-									value.measurementDate + "</td><td>" + value.value +
-									"</td><td>" + value.sensorId + "</td></tr>";
-								$("table").append(record);
-							}
-						}
 						});
                     }
                 });
