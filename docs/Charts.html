@@ -275,8 +275,9 @@ function addData(data) {
 	chart.render();
 
 }
-
-$.getJSON("https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=36", addData);
+var _idSensor = document.getElementById("select_idSensor").value;
+var param = "https://lorastore20181206101456.azurewebsites.net/api/Measurements?id=" + _idSensor;
+$.getJSON(param, addData);
 });
 
 
