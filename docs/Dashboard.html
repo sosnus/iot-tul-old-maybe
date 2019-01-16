@@ -113,20 +113,21 @@
           
           <!-- Icon Cards-->
          
-          <div class="row justify-content-md-center">
-            <div class="col-xl-3 col-sm-6 mb-3">
+          <div id="mainPage" class="row justify-content-md-center">
+           
+		   
+		   <!-- 
+			<div class="col-xl-3 col-sm-6 mb-3">
               <div class="card text-white bg-primary o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
-                    <i class="fas fa-fw fa-thermometer-full" ></i>
+                    
                   </div>
-                  <div class="mr-5">26 New Messages!</div>
+                  <div class="mr-5">ID Czunika:</div>
+                  <div class="mr-5">Wartość:</div>
+                  <div class="mr-5">Data ostatniego pomiaru:</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
+                
                 </a>
               </div>
             </div>
@@ -134,15 +135,13 @@
               <div class="card text-white bg-warning o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
-                    <i class="fas fa-fw fa-tint"></i>
+                    
                   </div>
-                  <div class="mr-5">11 New Tasks!</div>
+                  <div id="sensor1" class="mr-5">Sensor ID</div>
+                  <div id="value1" ="mr-5">Value</div>
+                  <div id="date1" class="mr-5">Date</div>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
+               
                 </a>
               </div>
             </div>
@@ -150,19 +149,18 @@
               <div class="card text-white bg-success o-hidden h-100">
                 <div class="card-body">
                   <div class="card-body-icon">
-                   <i class="fas fa-fw fa-assistive-listening-systems"></i>
+                   
                   </div>
-                  <div class="mr-5">123 New Orders!</div>
+                  <div id="sensor class="mr-5">Sensor ID</div>
+                  <div class="mr-5">Wartość:</div>
+                  <div class="mr-5">Data ostatniego pomiaru:</div>>
                 </div>
-                <a class="card-footer text-white clearfix small z-1" href="#">
-                  <span class="float-left">View Details</span>
-                  <span class="float-right">
-                    <i class="fas fa-angle-right"></i>
-                  </span>
+                
                 </a>
               </div>
             </div>
-          </div>
+          -->
+		  </div>
 
            <!-- Scroll to Top Button-->
     <a class="scroll-to-top rounded" href="#page-top">
@@ -213,19 +211,78 @@
       </div>
     </div>
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+<script>
 
 
+function my_code(){
+  function doDiv()
+  {
+    _div1 = "";
+    _container1 ="<div class='col-xl-3 col-sm-6 mb-3'><div class='card text-white bg-warning o-hidden h-100'><div class='card-body'><div class='card-body-icon'></div><div id='sensor1' class='mr-5'>ID: ";
+      _container1 += _ID;
+      _container1 += "</div><div  class='mr-5'>Value: ";
+      _container1 += _value;
+      _container1 += "</div><div  class='mr-5'>Last measurement: ";
+      _container1 += _datetime.substring(11, 19);
+      _container1 += " ";
+      _container1 += _datetime.substring(8, 10);
+      _container1 += ".";
+      _container1 += _datetime.substring(5, 7);
+      _container1 += ".";
+      _container1 += _datetime.substring(0, 4);
+      _container1 += "</div></div></div> </div>";
+    _div1 +=_container1;
+    console.log("ADD DIV"); 
+  
+    return _div1;
+  }
+  var _div ="";
+	var _container ="";
+	var _ID ="";
+	var _value ="";
+	var _datetime="";
+	
+	for (let i=36; i<51; i++) {
+		var param = "https://lorastore20181206101456.azurewebsites.net/api/Measurements?id="+i;
+		_ID=i;
+    $.ajax({
+      url: param,
+      dataType: "json",
+      
+      success: function (data) {
+        console.log("JSON:    DONE"); 
+        _div += doDiv();
+        $(data).each(function (index, value) {
+          _ID = i;
+          _value = value.value;
+          _datetime = value.measurementDate;
+        });
+      }   ,   
+      error: function (data) {
+        console.log("JSON:    BAD"); 
+
+      }
+
+    });
+
+		$(document).ajaxStop(function() {
+
+      document.getElementById('mainPage').innerHTML = _div;
+		});
+	}
+  document.getElementById('mainPage').innerHTML = _div;
+}
 
 
+window.onload=my_code();
 
-
-
-
-
-
-
-
-
+</script>
 
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
@@ -245,6 +302,5 @@
 <!-- Demo scripts for this page-->
 <script src="js/demo/datatables-demo.js"></script>
 <script src="js/demo/chart-area-demo.js"></script>
-   
       
   </body>
